@@ -629,13 +629,11 @@ class Storyblok {
 				}
 
 				if (response.data.cv && params.token) {
-					if (
-						params.version === 'draft' &&
-						cacheVersions[params.token] != response.data.cv
-					) {
+					if (cacheVersions[params.token] != response.data.cv) {
 						await this.flushCache()
+
+					    cacheVersions[params.token] = params.cv ? params.cv : response.data.cv
 					}
-					cacheVersions[params.token] = params.cv ? params.cv : response.data.cv
 				}
 
 				return resolve(response)

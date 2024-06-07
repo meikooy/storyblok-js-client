@@ -1,5 +1,5 @@
 {
-	"name": "storyblok-js-client",
+	"name": "@meiko/storyblok-js-client",
 	"version": "5.0.0",
 	"description": "Universal JavaScript SDK for Storyblok's API",
 	"license": "MIT",
@@ -41,16 +41,16 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/storyblok/storyblok-js-client.git"
+		"url": "https://github.com/meikooy/storyblok-js-client.git"
 	},
 	"keywords": [
 		"storyblok"
 	],
 	"author": "Alexander Feiglstorfer <delooks@gmail.com>",
 	"bugs": {
-		"url": "https://github.com/storyblok/storyblok-js-client/issues"
+		"url": "https://github.com/meikooy/storyblok-js-client/issues"
 	},
-	"homepage": "https://github.com/storyblok/storyblok-js-client#readme",
+	"homepage": "https://github.com/meikooy/storyblok-js-client#readme",
 	"devDependencies": {
 		"@commitlint/cli": "^18.4.3",
 		"@commitlint/config-conventional": "^18.4.3",
