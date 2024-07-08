@@ -24,10 +24,9 @@
   </a>
 </p>
 
-## Kickstart a new project
-Are you eager to dive into coding? **[Follow these steps to kickstart a new project with Storyblok and a JavaScript frontend framework](https://www.storyblok.com/technologies?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js)**, and get started in just a few minutes!
+## 🚀 Usage
 
-## Installation
+### Install
 
 ```sh
 npm install storyblok-js-client # yarn add storyblok-js-client
@@ -41,9 +40,9 @@ npm install storyblok-js-client # yarn add storyblok-js-client
 | Latest `storyblok-js-client` <br> + Fetch polyfill like [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) | Browsers and Node versions with no Fetch API support |
 | [Version 4](https://github.com/storyblok/storyblok-js-client/tree/v4.5.8) `storyblok-js-client@4`                               | Internet Explorer support                            |
 
-## How to use it
+### How to use it
 
-### Using the Content Delivery API
+#### Using the Content Delivery API
 
 ```javascript
 // 1. Import the Storyblok client
@@ -56,7 +55,7 @@ const Storyblok = new StoryblokClient({
 });
 ```
 
-### Using the Management API
+#### Using the Management API
 
 ```javascript
 // 1. Import the Storyblok client
@@ -78,7 +77,7 @@ Storyblok.put(`spaces/${spaceId}/stories/1`, {
 Storyblok.delete(`spaces/${spaceId}/stories/1`, null);
 ```
 
-### Using the RichTextResolver separately
+#### Using the RichTextResolver separately
 
 You can import and use the `RichTextResolver` directly:
 
@@ -90,7 +89,7 @@ const resolver = new RichTextResolver()
 const html = resolver.render(data)
 ```
 
-## NEW BRANCHES AND VERSIONS
+### NEW BRANCHES AND VERSIONS
 
 The old master branch containing version `4.x.y` has been moved to the `v4` branch.
 We’ve renamed the `master` branch to `main` and now it contains version >= 5.0.0.
@@ -102,9 +101,9 @@ Error handling from fetch has changed. Exceptions will be thrown as an object wi
 
 ```javascript
 {
-	message: string
-	status: number
-	response: ISbResponse
+  message: string
+  status: number
+  response: ISbResponse
 }
 ```
 
@@ -112,17 +111,17 @@ You don't need to parse the error from the client's side.
 
 ### BREAKING CHANGES - FROM VERSION 5
 
-#### Added TypeScript - Version 5
+### Added TypeScript - Version 5
 
 We added TypeScript to our codebase, improving our code quality and assuring the correct implementation from the client's side. This change will probably break your code, because your Storyblok client's current implementation is possibly sending the wrong types to the source.
 If you use an IDE to code, you'll be able to hover the problematic cause and see what is being expected from the type. Yet, you can keep using our version without TypeScript.
 
-#### Axios removal - Version 5
+### Axios removal - Version 5
 
 We removed our dependency on axios in Version `5`. If you want to continue using our SDK with axios, please use version `4`.
 The proxy feature was also removed in this version.
 
-#### Fetch (use polyfill if needed) - Version 5
+### Fetch (use polyfill if needed) - Version 5
 
 Version 5 is using native `fetch` API, supported by modern browsers and Node >= 18. If you are using an environment with no `fetch` API support, you can use a polyfill like [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) at the very beginning of your app entry point:
 
@@ -219,7 +218,7 @@ Exceptions will be thrown as an object with the following structure:
 where,
 
 ```typescript
-iinterface ISbResponse {
+interface ISbResponse {
   data: any
   status: number
   statusText: string
@@ -238,7 +237,11 @@ With this parameter, you can resolve relations with live updates in the Storyblo
 > It is important to note that when using the `storyblok-js-client` and other framework-specific SDKs, you don’t need to look for the `rels` array after resolving relations. The resolved relations are injected into the properties and, hence, are directly accessible through the properties. For example, you can access the authors array directly with `page.author` once it is resolved.
 
 ```javascript
-window.storyblok.resolveRelations(storyObject, relationsToResolve, callbackWhenResolved)
+window.storyblok.resolveRelations(
+  storyObject,
+  relationsToResolve,
+  callbackWhenResolved,
+)
 ```
 
 **Example**
@@ -246,7 +249,11 @@ window.storyblok.resolveRelations(storyObject, relationsToResolve, callbackWhenR
 ```javascript
 window.storyblok.on('input', (event) => {
   window.storyblok.addComments(event.story.content, event.story.id)
-  window.storyblok.resolveRelations(event.story, ['post.author', 'post.categories'], () => {})
+  window.storyblok.resolveRelations(
+    event.story,
+    ['post.author', 'post.categories'],
+    () => {},
+  )
 })
 ```
 
@@ -274,7 +281,7 @@ Storyblok.get(
     mode: 'cors',
     cache: 'no-cache',
     body: JSON.stringify(data),
-  }
+  },
 )
   .then((response) => {
     console.log(response)
@@ -441,7 +448,8 @@ Option 2: Dynamically render a component (Example in Vue.js, which will only wor
 
 ```javascript
 Storyblok.setComponentResolver((component, blok) => {
-  return `<component :blok='${JSON.stringify(blok)}' is="${component}"></component>`
+  return `<component :blok='${JSON.stringify(blok)}'
+                     is="${component}"></component>`
 })
 ```
 
@@ -505,9 +513,9 @@ const options = {
 Storyblok.richTextResolver.render(blok.richtext, options)
 ```
 
-## Code examples
+### Code examples
 
-### Define a custom cache for fine-grained control caching
+#### Define a custom cache for fine-grained control caching
 
 Sometimes you want a custom cache implemention, for instance, when you want to host it on Redit for a distributed cache.
 
@@ -538,19 +546,19 @@ new StoryblokClient({
 }
 ```
 
-### Filter by content type values and path
+#### Filter by content type values and path
 
 ```javascript
-import StoryblokClient from 'storyblok-js-client'
+import StoryblokClient from "storyblok-js-client";
 
 let client = new StoryblokClient({
-  accessToken: '<YOUR_SPACE_ACCESS_TOKEN>',
-})
+  accessToken: <YOUR_SPACE_ACCESS_TOKEN>,
+});
 
 // Filter by boolean value in content type
 client
-  .get('cdn/stories', {
-    version: 'draft',
+  .get("cdn/stories", {
+    version: "draft",
     filter_query: {
       is_featured: {
         in: true,
@@ -558,95 +566,99 @@ client
     },
   })
   .then((res) => {
-    console.log(res.data.stories)
-  })
+    console.log(res.data.stories);
+  });
 
 // Get all news and author contents
 client
-  .get('cdn/stories', {
-    version: 'draft',
+  .get("cdn/stories", {
+    version: "draft",
     filter_query: {
       component: {
-        in: 'news,author',
+        in: "news,author",
       },
     },
   })
   .then((res) => {
-    console.log(res.data.stories)
-  })
+    console.log(res.data.stories);
+  });
 
 // Get all content from the news folder
 client
-  .get('cdn/stories', {
-    version: 'draft',
-    starts_with: 'news/',
+  .get("cdn/stories", {
+    version: "draft",
+    starts_with: "news/",
   })
   .then((res) => {
-    console.log(res.data.stories)
-  })
+    console.log(res.data.stories);
+  });
 ```
 
-### Download all content from Storyblok
+#### Download all content from Storyblok
 
 Following a code example using the storyblok-js-client to back up all content on your local filesystem inside a 'backup' folder.
 
 ```javascript
-import StoryblokClient from 'storyblok-js-client'
-import fs from 'fs'
+import StoryblokClient from "storyblok-js-client";
+import fs from "fs";
 
 let client = new StoryblokClient({
-  accessToken: '<YOUR_SPACE_ACCESS_TOKEN>',
-})
+  accessToken: <YOUR_SPACE_ACCESS_TOKEN>,
+});
 
-let lastPage = 1
+let lastPage = 1;
 let getStories = (page) => {
   client
-    .get('cdn/stories', {
-      version: 'draft',
+    .get("cdn/stories", {
+      version: "draft",
       per_page: 25,
       page: page,
     })
     .then((res) => {
-      let stories = res.data.stories
+      let stories = res.data.stories;
       stories.forEach((story) => {
-        fs.writeFile('./backup/' + story.id + '.json', JSON.stringify(story), (err) => {
-          if (err) throw err
+        fs.writeFile(
+          "./backup/" + story.id + ".json",
+          JSON.stringify(story),
+          (err) => {
+            if (err) throw err;
 
-          console.log(story.full_slug + ' backed up')
-        })
-      })
+            console.log(story.full_slug + " backed up");
+          }
+        );
+      });
 
-      let total = res.total
-      lastPage = Math.ceil(res.total / res.perPage)
+      let total = res.total;
+      lastPage = Math.ceil(res.total / res.perPage);
 
       if (page <= lastPage) {
-        page++
-        getStories(page)
+        page++;
+        getStories(page);
       }
-    })
-}
+    });
+};
 
-getStories(1)
+getStories(1);
 ```
 
-### How to define a custom schema for the RichTextRenderer
+#### How to define a custom schema for the RichTextRenderer
 
 To define how to add some classes to specific html attributes rendered by the rich text renderer, you need your own schema definition. With this new schema, you can pass it as the `richTextSchema` option when instantiate the `StoryblokClient` class. You **must** follow the [default schema](https://github.com/storyblok/storyblok-js-client/blob/main/src/schema.ts) to do this.
 
 Below, you can check an example:
 
 ```javascript
-import StoryblokClient from 'storyblok-js-client'
+import StoryblokClient from "storyblok-js-client";
 
 // the default schema copied and updated
-import MySchema from './my-schema'
+import MySchema from "./my-schema";
 
 let client = new StoryblokClient({
-  accessToken: '<YOUR_SPACE_ACCESS_TOKEN>',
+  accessToken: <YOUR_SPACE_ACCESS_TOKEN>,
   richTextSchema: MySchema,
-})
+});
 
-client.richTextResolver.render(data)
+client.richTextResolver.render(data);
 ```
 
 If you just want to change the way a specific tag is rendered you can import the default schema and extend it. Following an example that will render headlines with classes:
@@ -736,21 +748,21 @@ client.getStories({token: 'preview'...}).then(previewResponse => ... ).catch()
 client.getStories({token: 'public'...}).then(publicResponse => ... ).catch()
 ```
 
-## Further Resources
+## 🔗 Related Links
 
-- [Quick Start](https://www.storyblok.com/technologies?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client)
-- [API Documentation](https://www.storyblok.com/docs/api?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client)
-- [Developer Tutorials](https://www.storyblok.com/tutorials?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client)
-- [Developer Guides](https://www.storyblok.com/docs/guide/introduction?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client)
-- [FAQs](https://www.storyblok.com/faqs?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client)
+- **[Storyblok & Javascript on GitHub](https://github.com/search?q=org%3Astoryblok+topic%3Ajavascript)**: Check all of our Javascript open source repos;
+- **[Technology Hub](https://www.storyblok.com/technologies?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client)**: We prepared technology hubs so that you can find selected beginner tutorials, videos, boilerplates, and even cheatsheets all in one place;
+- **[Storyblok CLI](https://github.com/storyblok/storyblok)**: A simple CLI for scaffolding Storyblok projects and fieldtypes.
 
-## Support
+## ℹ️ More Resources
+
+### Support
 
 - Bugs or Feature Requests? [Submit an issue](../../../issues/new);
 
 - Do you have questions about Storyblok or you need help? [Join our Discord Community](https://discord.gg/jKrbAMz).
 
-## Contributing
+### Contributing
 
 Please see our [contributing guidelines](https://github.com/storyblok/.github/blob/master/contributing.md) and our [code of conduct](https://www.storyblok.com/trust-center#code-of-conduct?utm_source=github.com&utm_medium=readme&utm_campaign=storyblok-js-client).
 This project use [semantic-release](https://semantic-release.gitbook.io/semantic-release/) for generate new versions by using commit messages and we use the Angular Convention to naming the commits. Check [this question](https://semantic-release.gitbook.io/semantic-release/support/faq#how-can-i-change-the-type-of-commits-that-trigger-a-release) about it in semantic-release FAQ.
