@@ -75,7 +75,6 @@ class Storyblok {
   private resolveCounter: number
   public relations: RelationsType
   public links: LinksType
-  // TODO: Remove on v7.x.x
   public richTextResolver: RichTextResolver
   public resolveNestedRelations: boolean
   private stringifiedStoriesCache: Record<string, string>
@@ -213,15 +212,14 @@ class Storyblok {
     url: string,
     params: ISbStoriesParams,
     per_page: number,
-    page: number,
-    fetchOptions?: ISbCustomFetch
+    page: number
   ): Promise<ISbResult> {
     const query = this.factoryParamOptions(
       url,
       this.helpers.getOptionsPage(params, per_page, page)
     )
 
-    return this.cacheResponse(url, query, undefined, fetchOptions)
+    return this.cacheResponse(url, query)
   }
 
   public get(
@@ -233,7 +231,8 @@ class Storyblok {
     const url = `/${slug}`
     const query = this.factoryParamOptions(url, params)
 
-    return this.cacheResponse(url, query, undefined, fetchOptions)
+    this.client.setFetchOptions(fetchOptions)
+    return this.cacheResponse(url, query)
   }
 
   public async getAll(
@@ -248,19 +247,15 @@ class Storyblok {
     const e = entity || urlParts[urlParts.length - 1]
 
     const firstPage = 1
-    const firstRes = await this.makeRequest(
-      url,
-      params,
-      perPage,
-      firstPage,
-      fetchOptions
-    )
+    const firstRes = await this.makeRequest(url, params, perPage, firstPage)
     const lastPage = firstRes.total ? Math.ceil(firstRes.total / perPage) : 1
+
+    this.client.setFetchOptions(fetchOptions)
 
     const restRes: any = await this.helpers.asyncMap(
       this.helpers.range(firstPage, lastPage),
       (i: number) => {
-        return this.makeRequest(url, params, perPage, i + 1, fetchOptions)
+        return this.makeRequest(url, params, perPage, i + 1)
       }
     )
 
@@ -276,7 +271,9 @@ class Storyblok {
   ): Promise<ISbResponseData> {
     const url = `/${slug}`
 
-    return Promise.resolve(this.throttle('post', url, params, fetchOptions))
+    this.client.setFetchOptions(fetchOptions)
+
+    return Promise.resolve(this.throttle('post', url, params))
   }
 
   public put(
@@ -286,7 +283,9 @@ class Storyblok {
   ): Promise<ISbResponseData> {
     const url = `/${slug}`
 
-    return Promise.resolve(this.throttle('put', url, params, fetchOptions))
+    this.client.setFetchOptions(fetchOptions)
+
+    return Promise.resolve(this.throttle('put', url, params))
   }
 
   public delete(
@@ -296,16 +295,19 @@ class Storyblok {
   ): Promise<ISbResponseData> {
     const url = `/${slug}`
 
-    return Promise.resolve(this.throttle('delete', url, params, fetchOptions))
+    this.client.setFetchOptions(fetchOptions)
+
+    return Promise.resolve(this.throttle('delete', url, params))
   }
 
   public getStories(
     params: ISbStoriesParams,
     fetchOptions?: ISbCustomFetch
   ): Promise<ISbStories> {
+    this.client.setFetchOptions(fetchOptions)
     this._addResolveLevel(params)
 
-    return this.get('cdn/stories', params, fetchOptions)
+    return this.get('cdn/stories', params)
   }
 
   public getStory(
@@ -313,9 +315,10 @@ class Storyblok {
     params: ISbStoryParams,
     fetchOptions?: ISbCustomFetch
   ): Promise<ISbStory> {
+    this.client.setFetchOptions(fetchOptions)
     this._addResolveLevel(params)
 
-    return this.get(`cdn/stories/${slug}`, params, fetchOptions)
+    return this.get(`cdn/stories/${slug}`, params)
   }
 
   private getToken(): string {
@@ -386,7 +389,7 @@ class Storyblok {
       if (typeof jtree[treeItem] === 'string') {
         jtree[treeItem] = this.getStoryReference(resolveId, jtree[treeItem])
       } else if (Array.isArray(jtree[treeItem])) {
-        jtree[treeItem] = jtree[treeItem as keyof ISbStoriesParams]
+        jtree[treeItem] = jtree[treeItem]
           .map((uuid: string) => this.getStoryReference(resolveId, uuid))
           .filter(Boolean)
       }
@@ -583,8 +586,7 @@ class Storyblok {
   private async cacheResponse(
     url: string,
     params: ISbStoriesParams,
-    retries?: number,
-    fetchOptions?: ISbCustomFetch
+    retries?: number
   ): Promise<ISbResult> {
     const cacheKey = this.helpers.stringify({ url: url, params: params })
     const provider = this.cacheProvider()
@@ -602,7 +604,7 @@ class Storyblok {
 
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await this.throttle('get', url, params, fetchOptions)
+        const res = await this.throttle('get', url, params)
         if (res.status !== 200) {
           return reject(res)
         }
@@ -660,10 +662,8 @@ class Storyblok {
   private throttledRequest(
     type: Method,
     url: string,
-    params: ISbStoriesParams,
-    fetchOptions?: ISbCustomFetch
+    params: ISbStoriesParams
   ): Promise<unknown> {
-    this.client.setFetchOptions(fetchOptions)
     return this.client[type](url, params)
   }
 
