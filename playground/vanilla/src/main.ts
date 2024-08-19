@@ -31,6 +31,8 @@ try {
 
   const html = resolver.render(paragraph)
 
+  console.log(Storyblok.cacheVersions())
+
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <pre>
     <code>
