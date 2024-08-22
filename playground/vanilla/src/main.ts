@@ -15,6 +15,7 @@ const Storyblok = new StoryblokClient({
 try {
   const result = await Storyblok.get('cdn/stories/', {
     version: 'draft',
+    resolve_relations: 'root.author',
   })
   const resolver = new RichTextResolver()
   
