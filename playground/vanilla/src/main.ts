@@ -1,5 +1,5 @@
 import StoryblokClient from '@meiko/storyblok-js-client'
-import RichTextResolver from 'storyblok-js-client/richTextResolver'
+import RichTextResolver from '@meiko/storyblok-js-client/richTextResolver'
 import './style.css'
 
 const headers = new Headers()
