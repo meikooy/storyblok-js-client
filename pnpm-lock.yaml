@@ -111,7 +111,7 @@ importers:
 
   playground/vanilla:
     dependencies:
-      storyblok-js-client:
+      '@meiko/storyblok-js-client':
         specifier: workspace:^
         version: link:../..
     devDependencies:
